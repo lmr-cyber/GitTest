@@ -104,7 +104,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new SessionRegistryImpl();
     }
 
-    @Override
+//    @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .withObjectPostProcessor(new ObjectPostProcessor<FilterSecurityInterceptor>() {
@@ -129,7 +129,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .csrf().disable().exceptionHandling()
                 //没有认证时，在这里处理结果，不要重定向
-                .authenticationEntryPoint((req, resp, authException) -> {
+                /*.authenticationEntryPoint((req, resp, authException) -> {
                             resp.setContentType("application/json;charset=utf-8");
                             resp.setStatus(401);
                             PrintWriter out = resp.getWriter();
@@ -141,7 +141,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                             out.flush();
                             out.close();
                         }
-                );
+                )*/;
         http.addFilterAt(new ConcurrentSessionFilter(sessionRegistry(), event -> {
             HttpServletResponse resp = event.getResponse();
             resp.setContentType("application/json;charset=utf-8");
