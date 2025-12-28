@@ -104,53 +104,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new SessionRegistryImpl();
     }
 
-//    @Override
+    @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
-                .withObjectPostProcessor(new ObjectPostProcessor<FilterSecurityInterceptor>() {
-                    @Override
-                    public <O extends FilterSecurityInterceptor> O postProcess(O object) {
-                        object.setAccessDecisionManager(customUrlDecisionManager);
-                        object.setSecurityMetadataSource(customFilterInvocationSecurityMetadataSource);
-                        return object;
-                    }
-                })
+        http.csrf().disable().authorizeRequests()
+                .anyRequest().permitAll() // 允许所有请求
                 .and()
-                .logout()
-                .logoutSuccessHandler((req, resp, authentication) -> {
-                            resp.setContentType("application/json;charset=utf-8");
-                            PrintWriter out = resp.getWriter();
-                            out.write(new ObjectMapper().writeValueAsString(RespBean.ok("注销成功!")));
-                            out.flush();
-                            out.close();
-                        }
-                )
-                .permitAll()
-                .and()
-                .csrf().disable().exceptionHandling()
-                //没有认证时，在这里处理结果，不要重定向
-                /*.authenticationEntryPoint((req, resp, authException) -> {
-                            resp.setContentType("application/json;charset=utf-8");
-                            resp.setStatus(401);
-                            PrintWriter out = resp.getWriter();
-                            RespBean respBean = RespBean.error("访问失败!");
-                            if (authException instanceof InsufficientAuthenticationException) {
-                                respBean.setMsg("请求失败，请联系管理员!");
-                            }
-                            out.write(new ObjectMapper().writeValueAsString(respBean));
-                            out.flush();
-                            out.close();
-                        }
-                )*/;
-        http.addFilterAt(new ConcurrentSessionFilter(sessionRegistry(), event -> {
-            HttpServletResponse resp = event.getResponse();
-            resp.setContentType("application/json;charset=utf-8");
-            resp.setStatus(401);
-            PrintWriter out = resp.getWriter();
-            out.write(new ObjectMapper().writeValueAsString(RespBean.error("您已在另一台设备登录，本次登录已下线!")));
-            out.flush();
-            out.close();
-        }), ConcurrentSessionFilter.class);
-        http.addFilterAt(loginFilter(), UsernamePasswordAuthenticationFilter.class);
+                .formLogin().disable() // 禁用登录配置
+                .httpBasic().disable(); // 禁用 HTTP Basic 认证
     }
 }

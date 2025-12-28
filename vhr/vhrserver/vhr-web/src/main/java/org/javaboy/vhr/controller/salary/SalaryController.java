@@ -14,12 +14,12 @@ public class SalaryController {
     @Autowired
     SalaryService salaryService;
 
-    @GetMapping("/")
+    @GetMapping("/getAllSalaries")
     public List<Salary> getAllSalaries() {
         return salaryService.getAllSalaries();
     }
 
-    @PostMapping("/")
+    @PostMapping("/addSalary")
     public RespBean addSalary(@RequestBody Salary salary) {
         if (salaryService.addSalary(salary) == 1) {
             return RespBean.ok("添加成功!");
@@ -35,7 +35,7 @@ public class SalaryController {
         return RespBean.error("删除失败！");
     }
 
-    @PutMapping("/")
+    @PutMapping("/updateSalaryById")
     public RespBean updateSalaryById(@RequestBody Salary salary) {
         if (salaryService.updateSalaryById(salary) == 1) {
             return RespBean.ok("更新成功!");
