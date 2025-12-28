@@ -22,7 +22,7 @@ server:
     enabled: true
 fastdfs:
   nginx:
-    host: http://192.168.188.100/
+    host: http://192.168.91.128/
 logging:
   level:
     com.vhr: debug
