@@ -5,6 +5,10 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import java.util.Date;
 
 public class Salary {
+    // 添加无参构造函数
+    public Salary() {
+        // 初始化默认值（可选）
+    }
     private Integer id;
 
     private Integer basicSalary;
@@ -34,6 +38,22 @@ public class Salary {
 
     private String name;
 
+    public Integer getIsDeleted() {
+        return isDeleted;
+    }
+
+    public void setIsDeleted(Integer isDeleted) {
+        this.isDeleted = isDeleted;
+    }
+
+    private Integer isDeleted;
+
+    public Salary(Integer isDeleted) {
+        this.isDeleted = isDeleted;
+    }
+    public Integer isDeleted() {
+        return isDeleted;
+    }
     public Integer getId() {
         return id;
     }

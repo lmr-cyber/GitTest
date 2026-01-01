@@ -16,14 +16,15 @@
         <result column="accumulationFundBase" property="accumulationFundBase" jdbcType="INTEGER"/>
         <result column="accumulationFundPer" property="accumulationFundPer" jdbcType="REAL"/>
         <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="isDeleted" property="isDeleted" jdbcType="INTEGER"/>
     </resultMap>
     <sql id="Base_Column_List">
     id, basicSalary, bonus, lunchSalary, trafficSalary, allSalary, pensionBase, pensionPer, 
-    createDate, medicalBase, medicalPer, accumulationFundBase, accumulationFundPer, name
+    createDate, medicalBase, medicalPer, accumulationFundBase, accumulationFundPer, name, isDeleted
   </sql>
     <select id="getAllSalaries" resultMap="BaseResultMap">
-        select
-        <include refid="Base_Column_List"/>
+        select *
+        <!--<include refid="Base_Column_List"/>-->
         from salary
     </select>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
@@ -32,21 +33,22 @@
         from salary
         where id = #{id,jdbcType=INTEGER}
     </select>
-    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from salary
-    where id = #{id,jdbcType=INTEGER}
-  </delete>
+    <update id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        update salary
+        set isDeleted = 1
+        where id = #{id,jdbcType=INTEGER}
+    </update>
     <insert id="insert" parameterType="org.javaboy.vhr.model.Salary">
     insert into salary (id, basicSalary, bonus, 
       lunchSalary, trafficSalary, allSalary, 
       pensionBase, pensionPer, createDate, 
       medicalBase, medicalPer, accumulationFundBase, 
-      accumulationFundPer, name)
+      accumulationFundPer, name, isDeleted)
     values (#{id,jdbcType=INTEGER}, #{basicSalary,jdbcType=INTEGER}, #{bonus,jdbcType=INTEGER}, 
       #{lunchSalary,jdbcType=INTEGER}, #{trafficSalary,jdbcType=INTEGER}, #{allSalary,jdbcType=INTEGER}, 
       #{pensionBase,jdbcType=INTEGER}, #{pensionPer,jdbcType=REAL}, #{createDate,jdbcType=TIMESTAMP}, 
       #{medicalBase,jdbcType=INTEGER}, #{medicalPer,jdbcType=REAL}, #{accumulationFundBase,jdbcType=INTEGER}, 
-      #{accumulationFundPer,jdbcType=REAL}, #{name,jdbcType=VARCHAR})
+      #{accumulationFundPer,jdbcType=REAL}, #{name,jdbcType=VARCHAR},#{isDeleted,javaType=INTEGER})
   </insert>
     <insert id="insertSelective" parameterType="org.javaboy.vhr.model.Salary">
         insert into salary
@@ -93,6 +95,9 @@
             <if test="name != null">
                 name,
             </if>
+            <if test="isDeleted != null">
+                isDeleted,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -137,6 +142,9 @@
             <if test="name != null">
                 #{name,jdbcType=VARCHAR},
             </if>
+            <if test="isDeleted != null">
+                #{isDeleted,jdbcType=INTEGER},
+            </if>
         </trim>
     </insert>
     <update id="updateByPrimaryKeySelective" parameterType="org.javaboy.vhr.model.Salary">
@@ -180,6 +188,9 @@
             </if>
             <if test="name != null">
                 name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="isDeleted != null">
+                isDeleted = #{isDeleted,jdbcType=INTEGER},
             </if>
         </set>
         where id = #{id,jdbcType=INTEGER}

@@ -19,7 +19,7 @@ public class SobConfigController {
     @Autowired
     SalaryService salaryService;
 
-    @GetMapping("/")
+    @GetMapping("/getEmployeeByPageWithSalary")
     public RespPageBean getEmployeeByPageWithSalary(@RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "10") Integer size) {
         return employeeService.getEmployeeByPageWithSalary(page, size);
     }
@@ -29,7 +29,7 @@ public class SobConfigController {
         return salaryService.getAllSalaries();
     }
 
-    @PutMapping("/")
+    @PutMapping("/updateEmployeeSalaryById")
     public RespBean updateEmployeeSalaryById(Integer eid, Integer sid) {
         Integer result = employeeService.updateEmployeeSalaryById(eid, sid);
         if (result == 1 || result == 2) {
