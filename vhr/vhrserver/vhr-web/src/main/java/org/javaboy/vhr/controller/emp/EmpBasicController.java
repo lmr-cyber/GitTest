@@ -37,12 +37,12 @@ public class EmpBasicController {
     @Autowired
     DepartmentService departmentService;
 
-    @GetMapping("/")
+    @GetMapping("/getEmployeeByPage")
     public RespPageBean getEmployeeByPage(@RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "10") Integer size, Employee employee, Date[] beginDateScope) {
         return employeeService.getEmployeeByPage(page, size, employee,beginDateScope);
     }
 
-    @PostMapping("/")
+    @PostMapping("/addEmp")
     public RespBean addEmp(@RequestBody Employee employee) {
         if (employeeService.addEmp(employee) == 1) {
             return RespBean.ok("添加成功!");
@@ -58,7 +58,7 @@ public class EmpBasicController {
         return RespBean.error("删除失败!");
     }
 
-    @PutMapping("/")
+    @PutMapping("/updateEmp")
     public RespBean updateEmp(@RequestBody Employee employee) {
         if (employeeService.updateEmp(employee) == 1) {
             return RespBean.ok("更新成功!");
